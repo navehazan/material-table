@@ -1,26 +1,21 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import MaterialTable from "material-table";
 
-function App() {
+export default function MaterialTableDemo() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <MaterialTable
+      options={{ paging: false, search: false }}
+      columns={[
+        { title: "Vendor", field: "vendor" },
+        { title: "Price", field: "price" },
+        { title: "Place", field: "place" },
+      ]}
+      data={[
+        { vendor: "ExpressVPN", price: 6.67, place: 1 },
+        { vendor: "Surfshark", price: 5.99 ,place: 2},
+        { vendor: "NordVPN", price: 6.99 ,place: 3},
+        { vendor: "IPVanish", price: 5.20 ,place: 4},
+      ]}
+    />
   );
 }
-
-export default App;
