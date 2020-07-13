@@ -1,17 +1,19 @@
 import React from "react";
-import MaterialTable from "material-table";
 import { useState } from "react";
-import TextField from "@material-ui/core/TextField";
 import { makeStyles } from "@material-ui/core/styles";
 
+import MaterialTable from "material-table";
+import TextField from "@material-ui/core/TextField";
+import Icon from "@material-ui/core/Icon";
+
 const useStyles = makeStyles({
-  underline: {
-    "&&&:before": {
-      borderBottom: "none",
-    },
-    "&&:after": {
-      borderBottom: "none",
-    },
+  iconContainer: {
+    display: "flex",
+    alignItems: "center",
+  },
+  icon: {
+    marginRight: "10px",
+    cursor: "pointer",
   },
 });
 
@@ -26,11 +28,16 @@ export default function MaterialTableDemo() {
         field: "price",
         render: (rowData) => {
           return (
-            <TextField
-              value={rowData.price}
-              InputProps={{ classes }}
-              onChange={(e) => null}
-            />
+            <div className={classes.iconContainer}>
+              <Icon className={classes.icon} onClick={toggleEditMode}>
+                edit
+              </Icon>
+              <TextField
+                value={rowData.price}
+                InputProps={{ disableUnderline: !state.editMode }}
+                onChange={(e) => null}
+              />
+            </div>
           );
         },
       },
@@ -44,6 +51,15 @@ export default function MaterialTableDemo() {
     ],
     editMode: false,
   });
+
+  const toggleEditMode = () => {
+    console.log(state.editMode)
+    setState((prevState) => {
+      const editMode = !prevState.editMode;
+      return { ...prevState, editMode };
+    });
+  };
+
   return (
     <MaterialTable
       title={"Best 4 vpn"}
@@ -57,18 +73,14 @@ export default function MaterialTableDemo() {
         isDeleteHidden: (rowData) => true,
         onRowAdd: (newData) =>
           new Promise((resolve) => {
-            setTimeout(
-              () => {
-                setState((prevState) => {
-                  const data = [...prevState.data];
-                  data.push(newData);
-                  return { ...prevState, data };
-                });
-                resolve();
-              },
-
-              600
-            );
+            setTimeout(() => {
+              setState((prevState) => {
+                const data = [...prevState.data];
+                data.push(newData);
+                return { ...prevState, data };
+              });
+              resolve();
+            }, 600);
           }),
         onRowUpdate: (newData, oldData) =>
           new Promise((resolve) => {
