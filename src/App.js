@@ -1,25 +1,10 @@
 import React from "react";
 import { useState } from "react";
-import { makeStyles } from "@material-ui/core/styles";
 
+import TextField from "./components/TextField";
 import MaterialTable from "material-table";
-import TextField from "@material-ui/core/TextField";
-import Icon from "@material-ui/core/Icon";
-
-const useStyles = makeStyles({
-  iconContainer: {
-    display: "flex",
-    alignItems: "center",
-  },
-  icon: {
-    marginRight: "10px",
-    cursor: "pointer",
-  },
-});
 
 export default function MaterialTableDemo() {
-  const classes = useStyles();
-
   const [state, setState] = useState({
     columns: [
       { title: "Vendor", field: "vendor" },
@@ -27,18 +12,7 @@ export default function MaterialTableDemo() {
         title: "Price",
         field: "price",
         render: (rowData) => {
-          return (
-            <div className={classes.iconContainer}>
-              <Icon className={classes.icon} onClick={toggleEditMode}>
-                edit
-              </Icon>
-              <TextField
-                value={rowData.price}
-                InputProps={{ disableUnderline: !state.editMode }}
-                onChange={(e) => null}
-              />
-            </div>
-          );
+          return <TextField editTable={editTable} rowData={rowData} />;
         },
       },
       { title: "Place", field: "place" },
@@ -49,14 +23,13 @@ export default function MaterialTableDemo() {
       { vendor: "NordVPN", price: 6.99, place: 3 },
       { vendor: "IPVanish", price: 5.2, place: 4 },
     ],
-    editMode: false,
   });
 
-  const toggleEditMode = () => {
-    console.log(state.editMode)
+  const editTable = (price, index) => {
     setState((prevState) => {
-      const editMode = !prevState.editMode;
-      return { ...prevState, editMode };
+      const data = [...prevState.data];
+      data[index] = { ...data[index], price };
+      return { ...prevState, data };
     });
   };
 
